@@ -1,0 +1,54 @@
+.box1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.option{
+    gap: 10px;
+    display: flex;
+    padding: 4px;
+    border-radius: 3px;
+    align-items: center;
+}
+.part1{
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    font-weight: bold;
+    margin-right: 4px;
+    color: black;
+}
+.part2{
+    display: flex;
+    flex: 1;
+}
+.part3{
+    /* font-weight: bold; */
+    font-size: large;
+    color: black;
+}
+.final{
+    text-align: center;
+    color: black;
+}
+.marks{
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+.option.selected {
+  background-color: rgba(14, 19, 27, 0.04);
+  border: 1px solid rgba(14, 19, 27, 0.5);
+}
+.option:hover {
+  background-color: rgba(14, 19, 27, 0.04);
+  border-color: none;
+}
+.compliment{
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 19px;
+}

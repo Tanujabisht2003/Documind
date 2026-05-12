@@ -1,0 +1,23 @@
+.result{
+    height:100vh;
+}
+.result1{
+    display:flex;
+    flex-direction: row;
+    padding:0.5% 15%;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid grey;
+}
+.header{
+    display: flex;
+    align-items: center;
+    gap: 5px
+}
+.result2{
+    margin:2% 0%;
+    padding:0% 15%;
+}
+.result3{
+    margin: 4% 0%;
+}

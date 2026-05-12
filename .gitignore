@@ -4,7 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
-
+node_modules
+.env
+__pycache__
+venv
+build
+dist
 # testing
 /coverage
 
