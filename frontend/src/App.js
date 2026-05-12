@@ -45,7 +45,7 @@ function App() {
     formData.append('file', acceptedFiles[0]);
     formData.append('name', acceptedFiles[0].name);
     try {
-        const res = await axios.post("http://localhost:8000/api/parse-pdf", formData,
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/parse-pdf`, formData,
     );
       if (res.status !== 200) {
         setError("Failed to upload file. Please try again.");
