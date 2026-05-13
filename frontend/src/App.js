@@ -123,7 +123,7 @@ function App() {
                           // fontSize: 20,
                           color: 'green',
                           position: 'absolute',
-                          top: '128px',
+                          top: '150px',
                           left: '403px',
                         }}
                       />
