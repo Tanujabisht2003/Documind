@@ -39,9 +39,7 @@ export default function QuizView({ data }) {
 
     let newScore = score;
 
-    const correctIndex = quizQuestions[currentQuestion].correct - 1;
-
-    if (selectedOption === correctIndex) {
+    if (selectedOption === quizQuestions[currentQuestion].correct) {
       newScore += 1;
     }
 
@@ -50,10 +48,10 @@ export default function QuizView({ data }) {
 
     setTimeout(() => {
       setShowIsCorrect(false);
+      setSelectedOption(null);
 
       if (currentQuestion < quizQuestions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
-        setSelectedOption(null);
       } else {
         setQuizCompleted(true);
       }

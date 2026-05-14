@@ -79,22 +79,7 @@ Return:
     {{
       "question": "...",
       "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 1
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 3
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 2
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 4
+      "correct": 0
     }},
     {{
       "question": "...",
@@ -119,12 +104,27 @@ Return:
     {{
       "question": "...",
       "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 4
+      "correct": 0
     }},
     {{
       "question": "...",
       "options": ["option 1", "option 2", "option 3", "option 4"],
       "correct": 2
+    }},
+    {{
+      "question": "...",
+      "options": ["option 1", "option 2", "option 3", "option 4"],
+      "correct": 0
+    }},
+    {{
+      "question": "...",
+      "options": ["option 1", "option 2", "option 3", "option 4"],
+      "correct": 3
+    }},
+    {{
+      "question": "...",
+      "options": ["option 1", "option 2", "option 3", "option 4"],
+      "correct": 1
     }}
   ],
   "notes": [
