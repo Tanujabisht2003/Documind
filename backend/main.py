@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from Pypdf import PdfReader
+from PyPDF2 import PdfReader
 import requests
 import os
 import json
