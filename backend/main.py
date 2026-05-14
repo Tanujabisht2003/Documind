@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from PyPDF2 import PdfReader
+from Pypdf import PdfReader
 import requests
 import os
 import json
@@ -22,6 +22,24 @@ AI_URL = "https://api.openai.com/v1/chat/completions"
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not found. Use export command.")
+
+def clean_json_response(content: str) -> str:
+    """
+    OpenAI kabhi kabhi ```json ... ``` markdown wrap karta hai.
+    Yeh function usse hata deta hai.
+    """
+    content = content.strip()
+    if content.startswith("```"):
+        # pehli line hata do (```json ya ```)
+        lines = content.split("\n")
+        # pehli aur aakhri line hato agar backtick hai
+        if lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        content = "\n".join(lines).strip()
+    return content
+
 
 # 🔥 Main API
 @app.post("/api/parse-pdf")
@@ -56,7 +74,28 @@ async def parse_pdf(file: UploadFile = File(...)):
         - Use simple educational language.
         - Output only valid JSON.
 
-        Each quiz question must have four options, and one must be correct. Set "correct" to 0, 1, 2, or 3 based on the position of the correct option in the array (0-based index).
+        QUIZ RULES:
+        - Generate exactly 10 MCQ questions
+        - Each question must contain:
+            - question
+            - options (4 options only)
+            - correct
+
+        - "correct" must contain the index position of the correct answer inside the options array.
+        - The index must be generated dynamically based on the actual correct option.
+        - Use 0-based indexing.
+
+        Example:
+        If options are:
+        [
+          "HTML",
+          "Python",
+          "Car",
+          "Tree"
+        ]
+
+        and "Python" is correct, then:
+        "correct": 1
 Return:
 
 {{
@@ -83,51 +122,6 @@ Return:
       "options": ["option 1", "option 2", "option 3", "option 4"],
       "correct": 0
     }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 2
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 1
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 3
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 1
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 0
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 2
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 0
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 3
-    }},
-    {{
-      "question": "...",
-      "options": ["option 1", "option 2", "option 3", "option 4"],
-      "correct": 1
-    }}
   ],
   "notes": [
   {{
@@ -245,18 +239,29 @@ TEXT:
             json=payload,
         )
 
+        # ✅ OpenAI error check
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=502,
+                detail=f"OpenAI API error: {response.status_code} — {response.text}"
+            )
+
         data = response.json()
 
         # 🔷 5. Extract content
         content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
 
+        if not content:
+            raise HTTPException(status_code=502, detail="OpenAI ka response empty hai.")
+
         # 🔷 6. Try parsing JSON safely
         try:
-            parsed = json.loads(content)
-            return {
-                "status": "success",
-                "data": parsed
-            }
+          clean_content = clean_json_response(content)
+          parsed = json.loads(clean_content)
+          return {
+              "status": "success",
+              "data": parsed
+          }
         except:
             return {
                 "status": "partial",
