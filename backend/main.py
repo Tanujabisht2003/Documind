@@ -55,6 +55,14 @@ async def parse_pdf(file: UploadFile = File(...)):
         - Avoid subheadings-only content.
         - Use simple educational language.
         - Output only valid JSON.
+
+        IMPORTANT:
+        The "correct" field must contain the ARRAY INDEX of the correct answer.
+
+        0 = option 1
+        1 = option 2
+        2 = option 3
+        3 = option 4
 Return:
 
 {{
