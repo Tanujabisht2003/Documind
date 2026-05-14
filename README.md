@@ -7,7 +7,7 @@ AI-Powered PDF Summarization and Content Generation
 - 📄 Upload PDF documents
 - 🤖 AI-generated summaries
 - 🧠 Automatic quiz generation
-- 
+- 📑 AI-generated presentation slides from documents
 
 ## 🛠 Tech Stack
 
