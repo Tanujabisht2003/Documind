@@ -56,13 +56,7 @@ async def parse_pdf(file: UploadFile = File(...)):
         - Use simple educational language.
         - Output only valid JSON.
 
-        IMPORTANT:
-        The "correct" field must contain the ARRAY INDEX of the correct answer.
-
-        0 = option 1
-        1 = option 2
-        2 = option 3
-        3 = option 4
+        Each quiz question must have four options, and one must be correct. Set "correct" to 0, 1, 2, or 3 based on the position of the correct option in the array (0-based index).
 Return:
 
 {{
