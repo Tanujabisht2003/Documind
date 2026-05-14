@@ -133,7 +133,7 @@ export default function QuizView({ data }) {
       ) : (
         <Card
           variant='outlined'
-          sx={{ width: 470, height: 350, borderRadius: 5, padding: 4 }}
+          sx={{ width: 500, height: 350, borderRadius: 5, padding: 4 }}
         >
           <CardContent>
             <div>
@@ -157,11 +157,6 @@ export default function QuizView({ data }) {
                   </p>
                 </div>
               </div>
-              {score === quizQuestions.length && (
-                <div>
-                  <div>🎉</div>
-                </div>
-              )}
             </div>
           </CardContent>
           <CardActions
