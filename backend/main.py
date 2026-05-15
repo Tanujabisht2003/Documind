@@ -5,60 +5,68 @@ import requests
 import os
 import json
 
+# FastAPI application create ho rahi hai
 app = FastAPI()
 
-# Allow React frontend
+# App me middleware add kar rahe hai 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # restrict later
+    allow_origins=["*"],  # sabhi frontend URLs allowed hain.
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Sab HTTP methods allow: GOT, PUT etc
+    allow_headers=["*"], #Sab headers allow.
 )
 
-# 🔥 OpenAI config (using export method)
+# Environment variable se API key le raha hai.
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# OpenAI chat completion endpoint.
 AI_URL = "https://api.openai.com/v1/chat/completions"
 
+# Agar API key nahi mili to error throw karenge
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not found. Use export command.")
 
+# Function define kar rahe ho. Input: AI ka response.Output:cleaned JSON text.
 def clean_json_response(content: str) -> str:
-    """
-    OpenAI kabhi kabhi ```json ... ``` markdown wrap karta hai.
-    Yeh function usse hata deta hai.
-    """
+  # Starting aur ending spaces remove karega
     content = content.strip()
     if content.startswith("```"):
-        # pehli line hata do (```json ya ```)
+        # Har line alag kar di.
         lines = content.split("\n")
-        # pehli aur aakhri line hato agar backtick hai
+         # pehli line hata do (```json ya ```)
         if lines[0].startswith("```"):
             lines = lines[1:]
+            # pehli aur aakhri line hato agar backtick hai
         if lines and lines[-1].strip() == "```":
             lines = lines[:-1]
+            # Remaining lines ko wapas string bana diya.
         content = "\n".join(lines).strip()
     return content
 
 
 # 🔥 Main API
 @app.post("/api/parse-pdf")
+# declare async function which receive uploaded file and File(...)) this means that file required hai 
 async def parse_pdf(file: UploadFile = File(...)):
     try:
-        # 🔷 1. Read PDF
+        # Read PDF
         reader = PdfReader(file.file)
+        # Empty string banayi.
         text_content = ""
 
+        # 
         for page in reader.pages:
             text_content += page.extract_text() or ""
 
+            # Agar text nahi mila we return 400 code
         if not text_content:
             raise HTTPException(status_code=400, detail="Empty PDF")
 
-        # 🔷 2. Limit text (VERY IMPORTANT)
+        #  Limit text (VERY IMPORTANT)
         text_content = text_content[:4000]
 
-        # 🔷 3. Prompt
+        # 3. Prompt
         prompt = f"""
         You are a strict assistant. Output only valid JSON. No markdown.
         Generate professional presentation slides.
@@ -220,7 +228,7 @@ TEXT:
 {text_content}
 """
 
-        # 🔷 4. OpenAI API call
+        # 4. OpenAI API call
         payload = {
             "model": "gpt-4o-mini",
             "messages": [
@@ -230,6 +238,7 @@ TEXT:
             "temperature": 0.7,
         }
 
+        # POST request bhej rahe ho.
         response = requests.post(
             AI_URL,
             headers={
@@ -239,23 +248,26 @@ TEXT:
             json=payload,
         )
 
-        # ✅ OpenAI error check
+        #  OpenAI error check
         if response.status_code != 200:
             raise HTTPException(
                 status_code=502,
                 detail=f"OpenAI API error: {response.status_code} — {response.text}"
             )
 
+          # API response ko Python dictionary me convert.
         data = response.json()
 
-        # 🔷 5. Extract content
+        # 5. Extract content
         content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
 
+        # Agar AI ne kuch return nahi kiya throw error 
         if not content:
             raise HTTPException(status_code=502, detail="OpenAI ka response empty hai.")
 
-        # 🔷 6. Try parsing JSON safely
+        # 6. Try parsing JSON safely
         try:
+          # Markdown remove.
           clean_content = clean_json_response(content)
           parsed = json.loads(clean_content)
           return {

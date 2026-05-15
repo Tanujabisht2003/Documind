@@ -17,7 +17,6 @@ export default function SlideView() {
   const location = useLocation();
   const parsedData = location.state || {};
   const slideNotes = parsedData?.notes || [];
-  // const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const slideRefs = useRef([]);
@@ -56,7 +55,6 @@ export default function SlideView() {
                 sx={{
                   width: 18,
                   height: 20,
-                  // marginLeft: 4,
                   color: '#0E131B',
                 }}
               />
@@ -133,6 +131,7 @@ export default function SlideView() {
             ))}
           </div>
         </div>
+        {/*  if loading is true then a window will apear when we click export pdf button */}
         {loading && (
           <div className='cover'>
             <div className='loader_box'>

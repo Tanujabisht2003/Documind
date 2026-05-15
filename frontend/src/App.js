@@ -14,17 +14,25 @@ import BasicTabs from './results/page';
 import SlideView from './slide-view';
 
 function App() {
-  const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
-    useDropzone({
-      accept: {
-        'application/pdf': ['.pdf'],
-      },
-      multiple: false,
-    });
+  const {
+    acceptedFiles,
+    fileRejections,
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useDropzone({
+    accept: {
+      'application/pdf': ['.pdf'],
+    },
+    multiple: false,
+    onDropRejected: () => {
+      alert('Only PDF files are allowed!');
+    },
+  });
   const files = acceptedFiles.map(file => file.name);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();

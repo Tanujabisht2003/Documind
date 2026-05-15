@@ -28,7 +28,6 @@ AI-Powered PDF Summarization and Content Generation
 ## 📸 Screenshots
 
 ### Home Page
-<!-- ![Home](./screenshots/home.png) -->
 ![Home](<Screenshot from 2026-05-14 17-00-25.png>)
 
 ### Upload Page

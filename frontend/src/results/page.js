@@ -88,10 +88,7 @@ export default function BasicTabs() {
         <div>
           <Button
             onClick={handleSubmit}
-            // className='slide'
             variant='outlined'
-            // sx={{padding: 0}}
-            // size='small'
           >
             <BootstrapTooltip
               describeChild
@@ -102,18 +99,13 @@ export default function BasicTabs() {
                 transition: Zoom,
               }}
             >
-              {/* <div className='button'> */}
               <PictureAsPdfIcon
                 sx={{
                   fontSize: 25,
                   color: 'blue',
                   display: 'flex',
-                  // alignItems: 'center',
-                  // justifyContent:'center'
                 }}
               />
-              {/* <span>Slides</span> */}
-              {/* </div> */}
             </BootstrapTooltip>
           </Button>
         </div>
@@ -123,8 +115,6 @@ export default function BasicTabs() {
           value={value}
           onChange={handleChange}
           aria-label='basic tabs example'
-          // indicatorColor='Primary'
-          // textColor='inherit'
           variant='fullWidth'
           sx={{ borderBottom: 1, borderColor: 'divider' }}
         >
